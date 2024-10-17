@@ -1,12 +1,19 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import spiritLogo from './assets/spirit_logo.svg';
 import './App.css';
 import { testBE } from "./services/SpiritAPIService.ts";
-import {Button} from "@mui/material";
+import { Button, Drawer, Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider } from "@mui/material";
+import InboxIcon from '@mui/icons-material/Inbox';
+import MailIcon from '@mui/icons-material/Mail';
 
 function App() {
   const [count, setCount] = useState(0);
   const hasFetched = useRef(false);
+  const [open, setOpen] = React.useState(false);
+
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +29,36 @@ function App() {
     fetchData();
   }, [count]);
 
+  const DrawerList = (
+      <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+        <List>
+          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+              <ListItem key={text} disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItemButton>
+              </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+              <ListItem key={text} disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItemButton>
+              </ListItem>
+          ))}
+        </List>
+      </Box>
+  );
+
   return (
       <>
         <div>
@@ -35,9 +72,10 @@ function App() {
         </div>
 
         <div>
-          <Button variant="contained" color="primary">
-            Натисни ме
-          </Button>
+          <Button variant="contained" color="primary" onClick={toggleDrawer(true)}>Open drawer</Button>
+          <Drawer open={open} onClose={toggleDrawer(false)}>
+            {DrawerList}
+          </Drawer>
         </div>
       </>
   );
