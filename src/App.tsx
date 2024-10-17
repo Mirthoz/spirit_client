@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import spiritLogo from './assets/spirit_logo.svg';
 import './App.css';
 import { testBE } from "./services/SpiritAPIService.ts";
+import {Button} from "@mui/material";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -31,6 +32,12 @@ function App() {
           <button onClick={() => setCount((prevCount) => prevCount + 1)}>
             count is {count}
           </button>
+        </div>
+
+        <div>
+          <Button variant="contained" color="primary">
+            Натисни ме
+          </Button>
         </div>
       </>
   );
